@@ -1,0 +1,16 @@
+<roblox version="4">
+  <Item class="BloomEffect" referent="0">
+    <Properties>
+      <string name="Name">Bloom</string>
+      <BinaryString name="AttributesSerialize"></BinaryString>
+      <SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+      <bool name="DefinesCapabilities">false</bool>
+      <bool name="Enabled">true</bool>
+      <float name="Intensity">1</float>
+      <float name="Size">24</float>
+      <int64 name="SourceAssetId">-1</int64>
+      <BinaryString name="Tags"></BinaryString>
+      <float name="Threshold">2</float>
+    </Properties>
+  </Item>
+</roblox>

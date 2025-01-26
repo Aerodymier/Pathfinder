@@ -1,0 +1,26 @@
+<roblox version="4">
+  <Item class="Atmosphere" referent="0">
+    <Properties>
+      <string name="Name">Atmosphere</string>
+      <BinaryString name="AttributesSerialize"></BinaryString>
+      <SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+      <Color3 name="Color">
+        <R>0.78039217</R>
+        <G>0.78039217</G>
+        <B>0.78039217</B>
+      </Color3>
+      <Color3 name="Decay">
+        <R>0.41568628</R>
+        <G>0.4392157</G>
+        <B>0.49019608</B>
+      </Color3>
+      <bool name="DefinesCapabilities">false</bool>
+      <float name="Density">0.3</float>
+      <float name="Glare">0</float>
+      <float name="Haze">0</float>
+      <float name="Offset">0.25</float>
+      <int64 name="SourceAssetId">-1</int64>
+      <BinaryString name="Tags"></BinaryString>
+    </Properties>
+  </Item>
+</roblox>

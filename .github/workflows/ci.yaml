@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  install-tools:
+    name: Install tools
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.7
+
+      - name: Install Rokit
+        uses: CompeyDev/setup-rokit@v0.1.2
+
+      - name: Cache installed items
+        uses: actions/cache@v4.2.0
+        with:
+          path: |
+            ~/.rokit
+          key: tools-${{ hashFiles('rokit.toml') }}
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    needs: [install-tools]
+  
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.7
+
+      - name: Restore installed items
+        uses: actions/cache@v4.2.0
+        with:
+          path: |
+            ~/.rokit
+          key: tools-${{ hashFiles('rokit.toml') }}
+
+      - name: Generate Roblox standard library
+        run: $HOME/.rokit/bin/selene generate-roblox-std
+
+      - name: Run Selene
+        run: $HOME/.rokit/bin/selene ./src
+
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    needs: [install-tools]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.7
+
+      - name: Restore installed items
+        uses: actions/cache@v4.2.0
+        with:
+          path: |
+            ~/.rokit
+          key: tools-${{ hashFiles('rokit.toml') }}
+
+      - name: Generate sourcemap
+        run: $HOME/.rokit/bin/rojo sourcemap default.project.json --output sourcemap.json
+
+      - name: Download global Roblox types
+        shell: bash
+        run: curl -s -O https://raw.githubusercontent.com/JohnnyMorganz/luau-lsp/master/scripts/globalTypes.d.luau
+
+      - name: Run Luau Analyze
+        run: $HOME/.rokit/bin/luau-lsp analyze --sourcemap=sourcemap.json --defs=globalTypes.d.luau --no-strict-dm-types ./src

@@ -1,0 +1,15 @@
+<roblox version="4">
+  <Item class="SunRaysEffect" referent="0">
+    <Properties>
+      <string name="Name">SunRays</string>
+      <BinaryString name="AttributesSerialize"></BinaryString>
+      <SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+      <bool name="DefinesCapabilities">false</bool>
+      <bool name="Enabled">true</bool>
+      <float name="Intensity">0.01</float>
+      <int64 name="SourceAssetId">-1</int64>
+      <float name="Spread">0.1</float>
+      <BinaryString name="Tags"></BinaryString>
+    </Properties>
+  </Item>
+</roblox>

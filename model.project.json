@@ -1,0 +1,6 @@
+{
+    "name": "Pathfinder",
+    "tree": {
+      "$path": "src/modules/Pathfinder"
+    }
+  }

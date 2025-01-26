@@ -1,0 +1,34 @@
+{
+  "name": "Pathfinder",
+  "tree": {
+    "$className": "DataModel",
+
+    "Workspace": {
+      "$path": "src/workspace"
+    },
+
+    "Lighting": {
+      "$path": "src/lighting",
+      "$properties": {
+        "Ambient": [0.27451, 0.27451, 0.27451],
+        "OutdoorAmbient": [0.27451, 0.27451, 0.27451],
+        "Brightness": 3,
+        "EnvironmentDiffuseScale": 1,
+        "EnvironmentSpecularScale": 1,
+        "GlobalShadows": true,
+        "Technology": "ShadowMap",
+        "ClockTime": 14.5,
+        "TimeOfDay": "14:30:00",
+        "GeographicLatitude": 0
+      }
+    },
+
+    "ServerStorage": {
+      "$path": "src/modules"
+    },
+
+    "ServerScriptService": {
+      "$path": "src/server"
+    }
+  }
+}

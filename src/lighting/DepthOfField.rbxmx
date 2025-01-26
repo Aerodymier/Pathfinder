@@ -1,0 +1,17 @@
+<roblox version="4">
+  <Item class="DepthOfFieldEffect" referent="0">
+    <Properties>
+      <string name="Name">DepthOfField</string>
+      <BinaryString name="AttributesSerialize"></BinaryString>
+      <SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+      <bool name="DefinesCapabilities">false</bool>
+      <bool name="Enabled">false</bool>
+      <float name="FarIntensity">0.1</float>
+      <float name="FocusDistance">0.05</float>
+      <float name="InFocusRadius">30</float>
+      <float name="NearIntensity">0.75</float>
+      <int64 name="SourceAssetId">-1</int64>
+      <BinaryString name="Tags"></BinaryString>
+    </Properties>
+  </Item>
+</roblox>
