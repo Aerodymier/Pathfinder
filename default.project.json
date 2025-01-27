@@ -23,6 +23,12 @@
       }
     },
 
+    "MaterialService": {
+      "$properties": {
+        "Use2022Materials": true
+      }
+    },
+
     "ServerStorage": {
       "$path": "src/modules"
     },
