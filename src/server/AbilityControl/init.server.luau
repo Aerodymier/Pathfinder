@@ -46,7 +46,7 @@ local function onCharacterAdded(char: Model)
 		DebugMode = true,
 		RandomMove = false,
 		DebugWaypoint = true,
-		AgentCanClimb = true,
+
 		AgentParameters = {
 			AgentRadius = 2, 
 			AgentHeight = 5,

@@ -17,7 +17,7 @@ local function onPlrAdded(plr: Player, char: Model)
 			DebugMode = true,
 			RandomMove = false,
 			DebugWaypoint = true,
-			AgentCanClimb = true,
+
 			AgentParameters = {
 				AgentRadius = 2, 
 				AgentHeight = 5,

@@ -21,7 +21,7 @@ local function onCharacterAdded(char: Model)
 		-- you can just make it true as well but the prints lag studio with 20 rigs
 		RandomMove = false,
 		DebugWaypoint = true,
-		AgentCanClimb = true,
+
 		AgentParameters = {
 			AgentRadius = 2, 
 			AgentHeight = 5,
