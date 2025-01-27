@@ -21,7 +21,7 @@ export type Pathfinder = {
 	["_memory"]: {any: any},
 	["_abilityCooldowns"]: {[string | number]: number},
 	["_moveFunction"]: ((Vector3) -> ())?,
-	["_jumpFunction"]: (() -> ())?,
+	["_jumpFunction"]: ((Vector3) -> (boolean))?,
 	["_randomMoveFunction"]: (() -> (Vector3))?
 }
 
@@ -43,8 +43,8 @@ export type PathfinderConfiguration = {
 	["DebugWaypoint"]: boolean?,
 	["MovingTarget"]: boolean?,
 	["RandomMove"]: boolean?,
-	["MoveFunction"]: (() -> ())?,
-	["JumpFunction"]: (() -> ())?,
+	["MoveFunction"]: ((Vector3) -> ())?,
+	["JumpFunction"]: ((Vector3) -> (boolean))?,
 	["RandomMoveFunction"]: (() -> (Vector3))?,
 	["AgentParameters"]: {[string]: any}?,
 	["AbilitiesTable"]: PathfinderAbilities?,
