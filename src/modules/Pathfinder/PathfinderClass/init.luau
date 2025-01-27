@@ -1,4 +1,5 @@
 --!strict
+
 local PathfindingService = game:GetService("PathfindingService")
 
 local Types = require(script.Parent.Types)
@@ -7,6 +8,9 @@ local PathfinderMethods = require(script.PathfinderMethods)
 local Pathfinder = {}
 Pathfinder.__index = setmetatable(Pathfinder, PathfinderMethods)
 
+--[[
+	Create a new Pathfinder instance.
+]]
 function Pathfinder.new(char: Model, config: Types.PathfinderConfiguration)
 	assert(char, "A character is required for Pathfinder.")
 
@@ -60,6 +64,9 @@ function Pathfinder.new(char: Model, config: Types.PathfinderConfiguration)
 	return s
 end
 
+--[[
+	Change the target. Use this when you want to change the active target.
+]]
 function Pathfinder:ChangeTarget(newTarget: Vector3 | BasePart)
 	self._target = newTarget
 
@@ -68,6 +75,9 @@ function Pathfinder:ChangeTarget(newTarget: Vector3 | BasePart)
 	end
 end
 
+--[[
+	Run Pathfinder. Will continue to run unless stopped if movingTarget is true.
+]]
 function Pathfinder:Run()
 	self:_DebugPrint("Pathfinding started.")
 	self._running = true
@@ -157,9 +167,27 @@ function Pathfinder:Run()
 	end
 end
 
+--[[
+	Stops the Pathfinder instance.
+]]
 function Pathfinder:Stop()
 	self._running = false
 	self._pathDone = true
+end
+
+--[[
+	Destroy the Pathfinder instance.
+]]
+function Pathfinder:Destroy()
+	if self._running then
+		self:Stop()
+	end
+
+	for _, c: RBXScriptConnection in self._connections do
+		c:Disconnect()
+	end
+
+	setmetatable(self, nil)
 end
 
 return Pathfinder
