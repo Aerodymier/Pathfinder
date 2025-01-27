@@ -25,9 +25,9 @@ end
 --[[
 	Jump function which accounts for a custom jump method.
 ]]
-function PathfinderMethods:_Jump()
+function PathfinderMethods:_Jump(p: Vector3): boolean
 	if self._jumpFunction then
-		self._jumpFunction()
+		return self._jumpFunction(p)
 	else
 		local Humanoid = self._character:FindFirstChildOfClass("Humanoid")
 
@@ -36,6 +36,8 @@ function PathfinderMethods:_Jump()
 		else
 			self:_DebugPrint("Humanoid does not exist, Jump did not run.")
 		end
+
+		return true
 	end
 end
 
@@ -89,8 +91,11 @@ function PathfinderMethods:_OnWaypointReached()
 			local Humanoid = self._character:FindFirstChildOfClass("Humanoid")
 			if not Humanoid then return end
 
-			Humanoid.Jump = true
-			self:_MoveTo(currentWaypointInfo.Position)
+			local willMoveTo = self:_Jump(currentWaypointInfo.Position)
+
+			if willMoveTo then
+				self:_MoveTo(currentWaypointInfo.Position)
+			end
 		else
 			self:_DebugPrint("Waypoint action: " .. currentWaypointInfo.Action.Name)
 			self:_MoveTo(currentWaypointInfo.Position)
