@@ -11,12 +11,14 @@ local function onCharacterAdded(char: Model)
 	if not char.Parent then return end
 	local t = char.Parent:FindFirstChild("End") :: BasePart
 	local isMovingTarget = char:GetAttribute("MovingTarget") :: boolean
-	
+
 	local p = Pathfinder.new(char, {
 		Target = t,
 		MovingTarget = false or isMovingTarget,
 		MovingTargetTrackingRange = 100,
-		DebugMode = true,
+		DebugMode = if char.Name == "Rig10" then true else false,
+		-- change it to any rig you want to test
+		-- you can just make it true as well but the prints lag studio with 20 rigs
 		RandomMove = false,
 		DebugWaypoint = true,
 		AgentCanClimb = true,
