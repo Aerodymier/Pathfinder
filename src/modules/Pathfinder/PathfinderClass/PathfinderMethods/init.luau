@@ -5,6 +5,9 @@ local PathfinderHelper = require(script.PathfinderHelper)
 local PathfinderMethods = {}
 PathfinderMethods.__index = setmetatable(PathfinderMethods, PathfinderHelper)
 
+--[[
+	MoveTo function which accounts for a custom MoveTo method.
+]]
 function PathfinderMethods:_MoveTo(p: Vector3)
 	if self._moveFunction then
 		self._moveFunction(p)
@@ -19,6 +22,9 @@ function PathfinderMethods:_MoveTo(p: Vector3)
 	end
 end
 
+--[[
+	Jump function which accounts for a custom jump method.
+]]
 function PathfinderMethods:_Jump()
 	if self._jumpFunction then
 		self._jumpFunction()
@@ -33,6 +39,9 @@ function PathfinderMethods:_Jump()
 	end
 end
 
+--[[
+	RandomMove which is structurally like an ability. Basically randomly moves to a close position.
+]]
 function PathfinderMethods:_RandomMove()
 	local pos: Vector3?
 	self:_DebugPrint("Random moving")
@@ -64,6 +73,9 @@ function PathfinderMethods:_RandomMove()
 	end
 end
 
+--[[
+	Handles basic waypoint actions and increments _currentWaypoint.
+]]
 function PathfinderMethods:_OnWaypointReached()
 	if self._waypoints and self._currentWaypoint and self._currentWaypoint < #self._waypoints then
 		self._currentWaypoint += 1
@@ -93,6 +105,9 @@ function PathfinderMethods:_OnWaypointReached()
 	end
 end
 
+--[[
+	The main function for pathfinding to a position.
+]]
 function PathfinderMethods:_MoveInPath(to: Vector3)
 	self._pathDone = false
 	self:_DebugPrint("Moving in path to " .. tostring(to))
@@ -184,7 +199,7 @@ function PathfinderMethods:_MoveInPath(to: Vector3)
 
 								repeat
 									task.wait()
-								until RootPart.AssemblyLinearVelocity:FuzzyEq(Vector3.new(0, 0, 0), .75)
+								until RootPart.AssemblyLinearVelocity:FuzzyEq(Vector3.new(0, 0, 0), .1)
 							end
 						end
 
@@ -229,6 +244,9 @@ function PathfinderMethods:_MoveInPath(to: Vector3)
 	end
 end
 
+--[[
+	Currently only sets the path as done and recalculates from current position.
+]]
 function PathfinderMethods:_OnPathBlocked(blockedWaypointIndex: number)
 	if blockedWaypointIndex > self._currentWaypoint then
 		local Humanoid = self._character:FindFirstChildOfClass("Humanoid")
@@ -242,6 +260,9 @@ function PathfinderMethods:_OnPathBlocked(blockedWaypointIndex: number)
 	end
 end
 
+--[[
+	Cleanup past waypoints and reset some variables
+]]
 function PathfinderMethods:_InitPathfinding()
 	self:_DebugPrint("Pathfinding init")
 	self._waypoints = {}
@@ -250,11 +271,14 @@ function PathfinderMethods:_InitPathfinding()
 
 	self._pathDone = true
 
-	self._connections[#self._connections+1] = self._path.Blocked:Connect(function(blockedWaypointIndex)
+	self._connections[#self._connections+1] = self._path.Blocked:Once(function(blockedWaypointIndex)
 		self:_OnPathBlocked(blockedWaypointIndex)
 	end)
 end
 
+--[[
+	The main function to get paths started and manage moving target retargeting.
+]]
 function PathfinderMethods:_PathOperations()
 	if self._movingTarget then
 		self._memory["CurrentPos"] = self:_GetTargetPosition()
