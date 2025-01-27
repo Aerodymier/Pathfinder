@@ -25,7 +25,7 @@ function Pathfinder.new(char: Model, config: Types.PathfinderConfiguration)
 	s._running = false
 	s._target = config.Target
 	s._pathfinderAbilities = config.AbilitiesTable :: Types.PathfinderAbilities
-	s._movingTargetTrackingRange = config.MovingTargetTrackingRange
+	s._movingTargetTrackingRange = config.MovingTargetTrackingRange or 100
 	s._movingTargetRetargetingRange = config.MovingTargetRetargetingRange or
 		math.max(charBoundingBox.X, charBoundingBox.Y, charBoundingBox.Z)
 	s._movingTarget = config.MovingTarget or false
@@ -67,7 +67,7 @@ end
 --[[
 	Change the target. Use this when you want to change the active target.
 ]]
-function Pathfinder:ChangeTarget(newTarget: Vector3 | BasePart)
+function Pathfinder:ChangeTarget(newTarget: Vector3 | BasePart | Model)
 	self._target = newTarget
 
 	if self._movingTarget then
