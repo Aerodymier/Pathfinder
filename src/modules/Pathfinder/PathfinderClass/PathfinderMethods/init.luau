@@ -158,8 +158,8 @@ function PathfinderMethods:_MoveInPath(to: Vector3)
 							math.round(angleNext) == 3 then
 							self:_DebugPrint("Skipped the waypoint behind the character " .. tostring(angle) .. " " .. tostring(angleNext))
 							continue
-						else
-							self:_DebugPrint("sk " .. " " .. tostring(self._currentWaypoint) .. " " .. tostring(angle) .. " " .. tostring(angleNext))
+						--else
+							--self:_DebugPrint("Angle " .. " " .. tostring(self._currentWaypoint) .. " " .. tostring(angle) .. " " .. tostring(angleNext))
 						end
 					end
 
@@ -186,7 +186,7 @@ function PathfinderMethods:_MoveInPath(to: Vector3)
 
 						local direction = self:_GetXZDirection(prePrevWaypointP, prevWaypointP)
 						
-						self:_DebugPrint(tostring(self._currentWaypoint) .. " " .. tostring(direction) .. " " .. tostring(previousDirection))
+						--self:_DebugPrint(tostring(self._currentWaypoint) .. " " .. tostring(direction) .. " " .. tostring(previousDirection))
 
 						if previousDirection and not previousDirection:FuzzyEq(direction, 0.01) and
 							(prePrevWaypointP.Y == prevWaypointP.Y 
