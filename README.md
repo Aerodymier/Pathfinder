@@ -25,7 +25,7 @@ TimerModule = "aerodymier/pathfinder^@0.1.0"
 and then run ``wally install`` in your current directory.
 
 ### Using Roblox Studio
-You can get the module asset from [here](https://create.roblox.com/store/asset/125173551498545/Pathfinder) or download it as a .rbxl file manually from [here](https://github.com/Aerodymier/Pathfinder/releases/latest/download/module.rbxl).
+You can get the module asset from [here](https://create.roblox.com/store/asset/125173551498545/Pathfinder) or download it as a .rbxl file manually from [here](https://github.com/Aerodymier/Pathfinder/releases/latest/download/module.rbxm).
 
 ## Usage
 You can find better examples in the example place which you can download from Releases or [here](https://github.com/Aerodymier/Pathfinder/releases/latest/download/ExamplePlace.rbxl).
