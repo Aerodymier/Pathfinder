@@ -132,11 +132,11 @@ function Pathfinder:Run()
 							" - " .. tostring(self._movingTargetTrackingRange)
 						)
 
-						if self._abilityLastActivated > os.clock() and self._randomMove then 
+						if self._abilityLastActivated < os.clock() and self._randomMove then 
 							self:_RandomMove() 
 						end
 					end
-				elseif self._abilityLastActivated > os.clock() and self._randomMove then
+				elseif self._abilityLastActivated < os.clock() and self._randomMove then
 					self:_RandomMove()
 				end
 
