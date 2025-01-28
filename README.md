@@ -13,6 +13,20 @@ Pathfinder is a pathfinding NPC character control module, aimed to be easy to us
 - Pathfinder will not work as fast as non-pathfinding character control methods, such as the plain MoveTo.
 - Pathfinder will not add new waypoints, although it can skip some waypoints to move without stopping, which means your paths will be as good as your navigation mesh in most cases.
 
+## Installation
+
+### Using wally
+You can install this module using wally by adding this to your [dependencies],
+
+```
+TimerModule = "aerodymier/pathfinder^@0.1.0"
+```
+
+and then run ``wally install`` in your current directory.
+
+### Using Roblox Studio
+You can get the module asset from [here](https://create.roblox.com/store/asset/125173551498545/Pathfinder) or download it as a .rbxl file manually from [here](https://github.com/Aerodymier/Pathfinder/releases/latest/download/module.rbxl).
+
 ## Usage
 You can find better examples in the example place which you can download from Releases or [here](https://github.com/Aerodymier/Pathfinder/releases/latest/download/ExamplePlace.rbxl).
 
