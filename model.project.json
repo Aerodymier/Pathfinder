@@ -1,5 +1,5 @@
 {
-    "name": "Pathfinder",
+    "name": "pathfinder",
     "tree": {
       "$path": "src/modules/Pathfinder"
     }
