@@ -118,9 +118,7 @@ function PathfinderHelper:_CheckIfAbilityCanBeActivated(dist: number, n: number)
 		and (if self._abilityCooldowns[n] then 
 			os.clock() - self._abilityCooldowns[n] >= ability.CooldownTime else true)
 		and (if ability.CustomConditions then ability.CustomConditions({
-			Character = self._character,
-			Target = self._target,
-			Distance = dist,
+			self:_DefaultT()
 		})
 	else true) then
 		return true
@@ -141,11 +139,7 @@ function PathfinderHelper:_CheckAndRunAbility(dist: number, n: number): boolean
 		self._abilityCooldowns[n] = os.clock()
 		self._abilityLastActivated = os.clock() + (ability.ActiveTime or 0)
 		
-		ability.Callback({
-			Character = self._character,
-			Target = self._target,
-			Distance = dist,
-		})
+		ability.Callback(self:_DefaultT())
 
 		return true
 	end
@@ -171,6 +165,25 @@ function PathfinderHelper:Roll(n: number, randomTable: {[number]: {[string]: num
 			end
 		end
 	end
+end
+
+function PathfinderHelper:_DefaultT()
+	local targetPos = self:_GetTargetPosition() :: Vector3
+	local charPos = self:_GetCharacterPosition() :: Vector3
+	local dist = (targetPos-charPos).Magnitude
+
+	return {
+		Character = self._character,
+		Target = self._target,
+		Distance = dist,
+		Move = function(p: Vector3)
+			self:_InitPathfinding()
+			self:_MoveInPath(p)
+		end,
+		RandomMove = function()	
+			self:_RandomMove()
+		end
+	}
 end
 
 return PathfinderHelper
