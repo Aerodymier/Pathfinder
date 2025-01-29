@@ -7,5 +7,9 @@ registry = "https://github.com/UpliftGames/wally-index"
 repository = "https://github.com/Aerodymier/Pathfinder"
 realm = "shared"
 authors = ["Aerodymier"]
+include = [
+    "../../../README.md",
+    "../../../LICENSE.md",
+]
 
 [dependencies]
