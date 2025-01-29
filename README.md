@@ -19,7 +19,7 @@ Pathfinder is a pathfinding NPC character control module, aimed to be easy to us
 You can install this module using wally by adding this to your [dependencies],
 
 ```
-TimerModule = "aerodymier/pathfinder^@0.1.0"
+TimerModule = "aerodymier/pathfinder^@0.1.1"
 ```
 
 and then run ``wally install`` in your current directory.
