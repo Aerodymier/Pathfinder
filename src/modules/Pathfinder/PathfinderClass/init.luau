@@ -4,18 +4,29 @@ local PathfindingService = game:GetService("PathfindingService")
 
 local Types = require(script.Parent.Types)
 local PathfinderMethods = require(script.PathfinderMethods)
+local PathfinderHelper = require(script.PathfinderMethods.PathfinderHelper)
 
 local Pathfinder = {}
 Pathfinder.__index = setmetatable(Pathfinder, PathfinderMethods)
 
+export type PathfinderInstance = typeof(setmetatable(
+	{} :: Types.Pathfinder
+, Pathfinder))
+
 --[[
 	Create a new Pathfinder instance.
 ]]
-function Pathfinder.new(char: Model, config: Types.PathfinderConfiguration)
+function Pathfinder.new(char: Model, config: Types.PathfinderConfiguration): PathfinderInstance
 	assert(char, "A character is required for Pathfinder.")
 
 	if config.MovingTarget then
 		assert(typeof(config.Target) ~= "Vector3", "A BasePart or a Model needs to be provided if MovingTarget is enabled.")
+	end
+
+	if config.AbilitiesTable then
+		for i, _ in config.AbilitiesTable do
+			assert(typeof(i) == "number", "AbilitiesTable keys must be numeric.")
+		end
 	end
 
 	local _, charBoundingBox = char:GetBoundingBox()
@@ -28,6 +39,7 @@ function Pathfinder.new(char: Model, config: Types.PathfinderConfiguration)
 	s._movingTargetTrackingRange = config.MovingTargetTrackingRange or 100
 	s._movingTargetRetargetingRange = config.MovingTargetRetargetingRange or
 		math.max(charBoundingBox.X, charBoundingBox.Y, charBoundingBox.Z)
+	s._activateAbilitiesInSequence = config.ActivateAbilitiesInSequence or false
 	s._movingTarget = config.MovingTarget or false
 	s._debugMode = config.DebugMode or false
 	s._debugWaypoint = config.DebugWaypoint or false
@@ -36,6 +48,7 @@ function Pathfinder.new(char: Model, config: Types.PathfinderConfiguration)
 	s._jumpFunction = config.JumpFunction
 	s._randomMoveFunction = config.RandomMoveFunction
 	s._abilityLastActivated = -1
+	s._currentAbilityIndex = 0
 	s._connections = {}
 	s._memory = {}
 	s._abilityCooldowns = {}
@@ -84,30 +97,37 @@ function Pathfinder:Run()
 	self:_InitPathfinding()
 	
 	local function checkAbilities(dist: number)
-		if self._pathfinderAbilities and next(self._pathfinderAbilities) then
-			for n, v in pairs(self._pathfinderAbilities) do
-				if dist <= v.ActivationRange 
-					and self._abilityLastActivated < os.clock()
-					and (if self._abilityCooldowns[n] then 
-						os.clock() - self._abilityCooldowns[n] >= v.CooldownTime else true)
-					and (if v.CustomConditions then v.CustomConditions({
-						Character = self._character,
-						Target = self._target,
-						Distance = dist,
-					}) 
-					else true) then
+		if self._pathfinderAbilities and #self._pathfinderAbilities > 0 then
+			if self._activateAbilitiesInSequence then
+				local currentIndex = self._currentAbilityIndex :: number -- luau typing issue
+				local newInd = currentIndex % #self._pathfinderAbilities + 1
 
-					self:_DebugPrint("Activating ability " .. tostring(n))
-
-					self._abilityCooldowns[n] = os.clock()
-					self._abilityLastActivated = os.clock() + (v.ActiveTime or 0)
-					
-					v.Callback({
-						Character = self._character,
-						Target = self._target,
-						Distance = dist,
-					})
+				if self:_CheckAndRunAbility(dist, newInd) then
+					self._currentAbilityIndex = newInd
 				end
+			else
+				local randomTable = {}
+				local total = 1
+				local rollN
+				local abilityToActivate
+
+				for n, v in ipairs(self._pathfinderAbilities) do
+					if self:_CheckIfAbilityCanBeActivated(dist, n) then
+						table.insert(randomTable, {
+							Weight = v.Weight or 1,
+							n = n
+						}) -- set up a table for roll
+
+						total += v.Weight
+					end
+				end
+
+				if #randomTable == 0 then return end -- no abilities to activate
+
+				rollN = math.random(total, total*4)
+				abilityToActivate = PathfinderHelper:Roll(rollN, randomTable)
+				
+				self:_CheckAndRunAbility(dist, abilityToActivate)
 			end
 		end
 	end
