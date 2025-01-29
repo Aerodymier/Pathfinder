@@ -9,7 +9,7 @@ realm = "shared"
 authors = ["Aerodymier <>"]
 exclude = ["*"]
 include = [
-    "src/modules/Pathfinder",
+    "./src/modules/Pathfinder",
     "wally.toml",
     "README.md",
     "LICENSE.md",
