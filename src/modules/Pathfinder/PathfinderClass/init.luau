@@ -47,6 +47,7 @@ function Pathfinder.new(char: Model, config: Types.PathfinderConfiguration): Pat
 	s._moveFunction = config.MoveFunction
 	s._jumpFunction = config.JumpFunction
 	s._randomMoveFunction = config.RandomMoveFunction
+	s._noPathAction = config.NoPathAction
 	s._abilityLastActivated = -1
 	s._currentAbilityIndex = 0
 	s._connections = {}

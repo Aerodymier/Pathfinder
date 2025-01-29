@@ -220,14 +220,20 @@ function PathfinderMethods:_MoveInPath(to: Vector3)
 	elseif self._path.Status == Enum.PathStatus.NoPath then
 		self:_DebugPrint("No path.")
 
-		local targetPos = if typeof(self._target) == "Vector3" then self._target else self._target:GetPivot().Position
+		local targetPos = self:_GetTargetPosition() :: Vector3
+		local charPos = self:_GetCharacterPosition() :: Vector3
+		local dist = (targetPos-charPos).Magnitude
 
-		if (targetPos-RootPart.Position).Magnitude < (self._movingTargetTrackingRange or math.huge) then
-			self:_DebugPrint("Moving target is in range, moving to moving target.")
-			self:_MoveTo(targetPos)
+		if self._noPathAction then
+			self._noPathAction(self:_DefaultT())
 		else
-			self:_DebugPrint("Random moving.")
-			self:_RandomMove()
+			if dist < (self._movingTargetTrackingRange or math.huge) then
+				self:_DebugPrint("Moving target is in range, moving to moving target.")
+				self:_MoveTo(targetPos)
+			else
+				self:_DebugPrint("Random moving.")
+				self:_RandomMove()
+			end
 		end
 
 		task.wait(0.5)

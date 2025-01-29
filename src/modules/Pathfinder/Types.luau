@@ -22,6 +22,7 @@ export type Pathfinder = {
 	["_connections"]: {[number]: RBXScriptConnection},
 	["_memory"]: {any: any},
 	["_abilityCooldowns"]: {[string | number]: number},
+	["_noPathAction"]: (() -> ())?,
 	["_moveFunction"]: ((Vector3) -> ())?,
 	["_jumpFunction"]: ((Vector3) -> (boolean))?,
 	["_randomMoveFunction"]: (() -> (Vector3))?
@@ -50,6 +51,7 @@ export type PathfinderConfiguration = {
 	["MoveFunction"]: ((Vector3) -> ())?,
 	["JumpFunction"]: ((Vector3) -> (boolean))?,
 	["RandomMoveFunction"]: (() -> (Vector3))?,
+	["NoPathAction"]: (() -> ())?,
 	["AgentParameters"]: {[string]: any}?,
 	["AbilitiesTable"]: PathfinderAbilities?,
 }
