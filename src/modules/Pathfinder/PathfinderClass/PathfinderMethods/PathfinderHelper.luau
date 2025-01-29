@@ -4,6 +4,8 @@ local Debris = game:GetService("Debris")
 local PathfinderHelper = {}
 PathfinderHelper.__index = PathfinderHelper
 
+local Types = require(script.Parent.Parent.Parent.Types)
+
 function PathfinderHelper:_InsertDebugWaypoint(pos: Vector3, num: number, color: Color3?, action: Enum.PathWaypointAction?)
 	if not self._debugWaypoint then return end
 
@@ -167,7 +169,7 @@ function PathfinderHelper:Roll(n: number, randomTable: {[number]: {[string]: num
 	end
 end
 
-function PathfinderHelper:_DefaultT()
+function PathfinderHelper:_DefaultT(): Types.t
 	local targetPos = self:_GetTargetPosition() :: Vector3
 	local charPos = self:_GetCharacterPosition() :: Vector3
 	local dist = (targetPos-charPos).Magnitude

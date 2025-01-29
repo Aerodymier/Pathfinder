@@ -236,11 +236,11 @@ function PathfinderMethods:_MoveInPath(to: Vector3)
 				self:_DebugPrint("Random moving.")
 				self:_RandomMove()
 			end
+
+			task.wait(0.5)
+
+			self._pathDone = true
 		end
-
-		task.wait(0.5)
-
-		self._pathDone = true
 	else
 		self:_MoveTo(RootPart.Position)
 		self:_DebugPrint("Unknown path status: " .. self._path.Status.Name)

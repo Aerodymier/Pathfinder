@@ -22,7 +22,7 @@ export type Pathfinder = {
 	["_connections"]: {[number]: RBXScriptConnection},
 	["_memory"]: {any: any},
 	["_abilityCooldowns"]: {[string | number]: number},
-	["_noPathAction"]: (() -> ())?,
+	["_noPathAction"]: ((t) -> ())?,
 	["_moveFunction"]: ((Vector3) -> ())?,
 	["_jumpFunction"]: ((Vector3) -> (boolean))?,
 	["_randomMoveFunction"]: (() -> (Vector3))?
@@ -34,8 +34,8 @@ export type PathfinderAbilities = {
 		["ActiveTime"]: number,
 		["CooldownTime"]: number,
 		["Weight"]: number?,
-		["CustomConditions"]: (({[string]: any}) -> (boolean))?,
-		["Callback"]: ({[string]: any}) -> (),
+		["CustomConditions"]: ((t) -> (boolean))?,
+		["Callback"]: (t) -> (),
 	}
 }
 
@@ -51,9 +51,17 @@ export type PathfinderConfiguration = {
 	["MoveFunction"]: ((Vector3) -> ())?,
 	["JumpFunction"]: ((Vector3) -> (boolean))?,
 	["RandomMoveFunction"]: (() -> (Vector3))?,
-	["NoPathAction"]: (() -> ())?,
+	["NoPathAction"]: ((t) -> ())?,
 	["AgentParameters"]: {[string]: any}?,
 	["AbilitiesTable"]: PathfinderAbilities?,
+}
+
+export type t = {
+	["Character"]: Model,
+	["Target"]: Model | Part | Vector3,
+	["Distance"]: number,
+	["Move"]: (Vector3) -> (),
+	["RandomMove"]: () -> ()
 }
 
 return {}
