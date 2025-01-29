@@ -2,7 +2,7 @@
 name = "aerodymier/pathfinder"
 description = "Pathfinder is a pathfinding NPC character control module, aimed to be easy to use and flexible for different use cases."
 license = "MIT"
-version = "0.1.1"
+version = "0.1.1-1"
 registry = "https://github.com/UpliftGames/wally-index"
 repository = "https://github.com/Aerodymier/Pathfinder"
 realm = "shared"
