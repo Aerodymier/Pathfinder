@@ -147,7 +147,7 @@ and expects a Vector3 return which the character will move to.
 
 ```luau
 {
-	[string | number]: {
+	[number]: {
 		["ActivationRange"]: number,
 		["ActiveTime"]: number,
 		["CooldownTime"]: number,
