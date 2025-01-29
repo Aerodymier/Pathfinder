@@ -109,11 +109,67 @@ function PathfinderHelper:_OnPositionChanged()
 	self._memory["PreviousDirection"] = direction
 end
 
+function PathfinderHelper:_CheckIfAbilityCanBeActivated(dist: number, n: number): boolean
+	local ability = self._pathfinderAbilities[n]
+	assert(ability, "An ability with " .. n  .. " key does not exist.")
+
+	if dist <= ability.ActivationRange 
+		and self._abilityLastActivated < os.clock()
+		and (if self._abilityCooldowns[n] then 
+			os.clock() - self._abilityCooldowns[n] >= ability.CooldownTime else true)
+		and (if ability.CustomConditions then ability.CustomConditions({
+			Character = self._character,
+			Target = self._target,
+			Distance = dist,
+		})
+	else true) then
+		return true
+	else
+		return false
+	end
+end
+
+function PathfinderHelper:_CheckAndRunAbility(dist: number, n: number): boolean
+	local ability = self._pathfinderAbilities[n]
+	assert(ability, "An ability with " .. n  .. " key does not exist.")
+
+	local canBeActivated = self:_CheckIfAbilityCanBeActivated(dist, n)
+
+	if canBeActivated then
+		self:_DebugPrint("Activating ability " .. tostring(n))
+
+		self._abilityCooldowns[n] = os.clock()
+		self._abilityLastActivated = os.clock() + (ability.ActiveTime or 0)
+		
+		ability.Callback({
+			Character = self._character,
+			Target = self._target,
+			Distance = dist,
+		})
+
+		return true
+	end
+
+	return false
+end
+
 function PathfinderHelper:_DebugPrint(...: any)
 	if self._debugMode then
 		local charName: string = self._character.Name
 		
 		print("[" .. charName .. "]", ...)
+	end
+end
+
+function PathfinderHelper:Roll(n: number, randomTable: {[number]: {[string]: number}}): number
+	while true do
+		for _, v in ipairs(randomTable) do
+			n -= v.Weight
+
+			if n < 0 then
+				return v.n
+			end
+		end
 	end
 end
 
