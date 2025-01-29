@@ -217,7 +217,9 @@ function PathfinderMethods:_MoveInPath(to: Vector3)
 
 			self:_DebugPrint("Path took " .. os.clock() - start .. " seconds.")
 		end)
-	elseif self._path.Status == Enum.PathStatus.NoPath then
+	elseif self._path.Status == Enum.PathStatus.NoPath or 
+		self._path.Status == Enum.PathStatus.ClosestNoPath  then
+		-- 04/12/2024, even if it is marked as deprecated, pathfinding service still returns ClosestNoPath
 		self:_DebugPrint("No path.")
 
 		local targetPos = self:_GetTargetPosition() :: Vector3
@@ -239,16 +241,9 @@ function PathfinderMethods:_MoveInPath(to: Vector3)
 		task.wait(0.5)
 
 		self._pathDone = true
-	elseif self._path.Status == Enum.PathStatus.ClosestNoPath then
-		-- 04/12/2024, even if it is marked as deprecated, pathfinding service still returns this
-		self:_DebugPrint("ClosestNoPath")
-
-		-- TODO: ability or move to target
-
-		self._pathDone = true
 	else
 		self:_MoveTo(RootPart.Position)
-		self:_DebugPrint("other path status: " .. self._path.Status.Name)
+		self:_DebugPrint("Unknown path status: " .. self._path.Status.Name)
 		self:_RandomMove()
 
 		self._pathDone = true
