@@ -26,7 +26,7 @@ local function onCharacterAdded(char: Model)
 		Target = target,
 		MovingTarget = false or isMovingTarget,
 		MovingTargetTrackingRange = 100,
-		DebugMode = if char.Name == "Rig22" then true else false,
+		DebugMode = if char.Name == "Rig10" then true else false,
 		-- change it to any rig you want to test
 		-- you can just make it true as well but the prints lag studio with 20 rigs
 		RandomMove = false,
