@@ -16,26 +16,56 @@ local function onCharacterAdded(char: Model)
 	
 	local PathfinderAbilities = {
 		{
-			ActivationRange = 30,
-			ActiveTime = 3,
-			CooldownTime = 10,
+			ActivationRange = 100,
+			ActiveTime = 1,
+			CooldownTime = 1,
+			Weight = 10,
 			CustomConditions = function()
 				return true
 			end,
 			Callback = function(t2)
 				local vf = t2.Character:FindFirstChildOfClass("VectorForce")
 					or Instance.new("VectorForce")
+
+				local hrp = t2.Character:FindFirstChild("HumanoidRootPart") :: Part
+				local rootAttach = hrp:FindFirstChild("RootAttachment") :: Attachment
 				
 				vf.Force = Vector3.new(0, 1, 0) * 5000
 				vf.ApplyAtCenterOfMass = true
-				vf.Attachment0 = t2.Character:FindFirstChild("HumanoidRootPart"):FindFirstChild("RootAttachment")
-				vf.Parent = t2.Character:FindFirstChild("HumanoidRootPart")
+				vf.Attachment0 = rootAttach
+				vf.Parent = hrp
 				vf.Enabled = true
 				
 				task.delay(.3, function()
 					vf.Enabled = false
 				end)
 			end,
+		},
+		{
+			ActivationRange = 100,
+			ActiveTime = 1,
+			CooldownTime = 1,
+			Weight = 1,
+			CustomConditions = function()
+				return true
+			end,
+			Callback = function(t2)
+				local vf = t2.Character:FindFirstChildOfClass("VectorForce")
+					or Instance.new("VectorForce")
+
+				local hrp = t2.Character:FindFirstChild("HumanoidRootPart") :: Part
+				local rootAttach = hrp:FindFirstChild("RootAttachment") :: Attachment
+				
+				vf.Force = Vector3.new(0, 1, 0) * 7000
+				vf.ApplyAtCenterOfMass = true
+				vf.Attachment0 = rootAttach
+				vf.Parent = hrp
+				vf.Enabled = true
+				
+				task.delay(.3, function()
+					vf.Enabled = false
+				end)
+			end
 		}
 	} :: PathfinderAbilities
 	
@@ -46,6 +76,7 @@ local function onCharacterAdded(char: Model)
 		DebugMode = true,
 		RandomMove = false,
 		DebugWaypoint = true,
+		ActivateAbilitiesInSequence = if char.Name == "Rig21" then true else false,
 
 		AgentParameters = {
 			AgentRadius = 2, 

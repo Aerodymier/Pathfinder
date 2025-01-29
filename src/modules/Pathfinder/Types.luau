@@ -12,26 +12,30 @@ export type Pathfinder = {
 	["_pathDone"]: boolean,
 	["_waypoints"]: {[number]: PathWaypoint},
 	["_currentWaypoint"]: number,
+	["_currentAbilityIndex"]: number,
 	["_rp"]: RaycastParams,
 	["_lastPathTick"]: number?,
 	["_debugMode"]: boolean?,
 	["_debugWaypoint"]: boolean?,
 	["_randomMove"]: boolean?,
+	["_activateAbilitiesInSequence"]: boolean?,
 	["_connections"]: {[number]: RBXScriptConnection},
 	["_memory"]: {any: any},
 	["_abilityCooldowns"]: {[string | number]: number},
+	["_noPathAction"]: ((t) -> ())?,
 	["_moveFunction"]: ((Vector3) -> ())?,
 	["_jumpFunction"]: ((Vector3) -> (boolean))?,
 	["_randomMoveFunction"]: (() -> (Vector3))?
 }
 
 export type PathfinderAbilities = {
-	[string | number]: {
+	[number]: {
 		["ActivationRange"]: number,
 		["ActiveTime"]: number,
 		["CooldownTime"]: number,
-		["CustomConditions"]: (({[string]: any}) -> (boolean))?,
-		["Callback"]: ({[string]: any}) -> (),
+		["Weight"]: number?,
+		["CustomConditions"]: ((t) -> (boolean))?,
+		["Callback"]: (t) -> (),
 	}
 }
 
@@ -43,11 +47,21 @@ export type PathfinderConfiguration = {
 	["DebugWaypoint"]: boolean?,
 	["MovingTarget"]: boolean?,
 	["RandomMove"]: boolean?,
+	["ActivateAbilitiesInSequence"]: boolean?,
 	["MoveFunction"]: ((Vector3) -> ())?,
 	["JumpFunction"]: ((Vector3) -> (boolean))?,
 	["RandomMoveFunction"]: (() -> (Vector3))?,
+	["NoPathAction"]: ((t) -> ())?,
 	["AgentParameters"]: {[string]: any}?,
 	["AbilitiesTable"]: PathfinderAbilities?,
+}
+
+export type t = {
+	["Character"]: Model,
+	["Target"]: Model | Part | Vector3,
+	["Distance"]: number,
+	["Move"]: (Vector3) -> (),
+	["RandomMove"]: () -> ()
 }
 
 return {}

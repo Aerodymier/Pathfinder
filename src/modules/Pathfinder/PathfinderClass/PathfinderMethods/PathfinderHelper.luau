@@ -4,6 +4,8 @@ local Debris = game:GetService("Debris")
 local PathfinderHelper = {}
 PathfinderHelper.__index = PathfinderHelper
 
+local Types = require(script.Parent.Parent.Parent.Types)
+
 function PathfinderHelper:_InsertDebugWaypoint(pos: Vector3, num: number, color: Color3?, action: Enum.PathWaypointAction?)
 	if not self._debugWaypoint then return end
 
@@ -109,12 +111,81 @@ function PathfinderHelper:_OnPositionChanged()
 	self._memory["PreviousDirection"] = direction
 end
 
+function PathfinderHelper:_CheckIfAbilityCanBeActivated(dist: number, n: number): boolean
+	local ability = self._pathfinderAbilities[n]
+	assert(ability, "An ability with " .. n  .. " key does not exist.")
+
+	if dist <= ability.ActivationRange 
+		and self._abilityLastActivated < os.clock()
+		and (if self._abilityCooldowns[n] then 
+			os.clock() - self._abilityCooldowns[n] >= ability.CooldownTime else true)
+		and (if ability.CustomConditions then ability.CustomConditions({
+			self:_DefaultT()
+		})
+	else true) then
+		return true
+	else
+		return false
+	end
+end
+
+function PathfinderHelper:_CheckAndRunAbility(dist: number, n: number): boolean
+	local ability = self._pathfinderAbilities[n]
+	assert(ability, "An ability with " .. n  .. " key does not exist.")
+
+	local canBeActivated = self:_CheckIfAbilityCanBeActivated(dist, n)
+
+	if canBeActivated then
+		self:_DebugPrint("Activating ability " .. tostring(n))
+
+		self._abilityCooldowns[n] = os.clock()
+		self._abilityLastActivated = os.clock() + (ability.ActiveTime or 0)
+		
+		ability.Callback(self:_DefaultT())
+
+		return true
+	end
+
+	return false
+end
+
 function PathfinderHelper:_DebugPrint(...: any)
 	if self._debugMode then
 		local charName: string = self._character.Name
 		
 		print("[" .. charName .. "]", ...)
 	end
+end
+
+function PathfinderHelper:Roll(n: number, randomTable: {[number]: {[string]: number}}): number
+	while true do
+		for _, v in ipairs(randomTable) do
+			n -= v.Weight
+
+			if n < 0 then
+				return v.n
+			end
+		end
+	end
+end
+
+function PathfinderHelper:_DefaultT(): Types.t
+	local targetPos = self:_GetTargetPosition() :: Vector3
+	local charPos = self:_GetCharacterPosition() :: Vector3
+	local dist = (targetPos-charPos).Magnitude
+
+	return {
+		Character = self._character,
+		Target = self._target,
+		Distance = dist,
+		Move = function(p: Vector3)
+			self:_InitPathfinding()
+			self:_MoveInPath(p)
+		end,
+		RandomMove = function()	
+			self:_RandomMove()
+		end
+	}
 end
 
 return PathfinderHelper

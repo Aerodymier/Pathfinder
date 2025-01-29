@@ -6,14 +6,24 @@ local CollectionService = game:GetService("CollectionService")
 local TAG = "TestRig"
 
 local Pathfinder = require(ServerStorage:FindFirstChild("Pathfinder"))
+local Types = require(ServerStorage:FindFirstChild("Pathfinder"):FindFirstChild("Types"))
 
 local function onCharacterAdded(char: Model)
 	if not char.Parent then return end
-	local t = char.Parent:FindFirstChild("End") :: BasePart
+	local target = char.Parent:FindFirstChild("End") :: BasePart
 	local isMovingTarget = char:GetAttribute("MovingTarget") :: boolean
 
+	local function NoPathAction(t: Types.t)
+		local TestFolder = t.Character.Parent
+		if not TestFolder then return end
+		local start = TestFolder:FindFirstChild("Start") :: BasePart?
+		assert(start, "Start does not exist for the selected folder.")
+
+		t.Move(start.Position)
+	end
+
 	local p = Pathfinder.new(char, {
-		Target = t,
+		Target = target,
 		MovingTarget = false or isMovingTarget,
 		MovingTargetTrackingRange = 100,
 		DebugMode = if char.Name == "Rig10" then true else false,
@@ -21,6 +31,7 @@ local function onCharacterAdded(char: Model)
 		-- you can just make it true as well but the prints lag studio with 20 rigs
 		RandomMove = false,
 		DebugWaypoint = true,
+		NoPathAction = if char.Name == "Rig22" then NoPathAction else nil,
 
 		AgentParameters = {
 			AgentRadius = 2, 
