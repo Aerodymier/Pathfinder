@@ -184,6 +184,9 @@ function PathfinderHelper:_DefaultT(): Types.t
 		end,
 		RandomMove = function()	
 			self:_RandomMove()
+		end,
+		DebugPrint = function(...: any)
+			self:_DebugPrint(...)
 		end
 	}
 end
