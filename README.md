@@ -19,7 +19,7 @@ Pathfinder is a pathfinding NPC character control module, aimed to be easy to us
 You can install this module using wally by adding this to your [dependencies],
 
 ```
-Pathfinder = "aerodymier/pathfinder@^0.2.0"
+Pathfinder = "aerodymier/pathfinder@^0.2.1"
 ```
 
 and then run ``wally install`` in your current directory.
@@ -139,11 +139,13 @@ and expects a Vector3 return which the character will move to.
 
 - ``["ActiveTime"]: number`` : The time which the ability will be active for. No other abilities will be ran meanwhile.
 
-- ``["CooldownTime"]: number`` : -- Ability cooldown time
+- ``["CooldownTime"]: number`` : Ability cooldown time
 
-- ``["CustomConditions"]: (({[string]: any}) -> (boolean))?`` : -- Optional, gets passed the same t as Callback. Custom conditions to check if the ability will activate or not.
+- ``["CustomConditions"]: (({[string]: any}) -> (boolean))?`` : Optional, gets passed the same t as Callback. Custom conditions to check if the ability will activate or not.
 
-- ``["Callback"]: ({[string]: any}) -> ()`` : -- t.Character, t.Target and t.Distance are available. Ability callback.
+- ``["Callback"]: ({[string]: any}) -> ()`` : t.Character, t.Target and t.Distance are available. Ability callback.
+
+- ``["DebugPrint]: (any) -> ()`` : The internal DebugPrint function, you can use this instead of your other prints to filter for your character name in the output.
 
 ```luau
 {
@@ -153,11 +155,23 @@ and expects a Vector3 return which the character will move to.
 		["CooldownTime"]: number,
 		["CustomConditions"]: (({[string]: any}) -> (boolean))?,
 		["Callback"]: ({[string]: any}) -> (),
+        ["DebugPrint"]: (any) -> (),
 	}
 }
 ```
 
 ``PathfinderInstance:Run()``: Runs Pathfinder.
+
 ``PathfinderInstance:ChangeTarget(Vector3 | BasePart | Model))``: Used to change the target and also retarget to the new target. Still targets will not retarget unless ``:Run()`` is called manually.
+
 ``PathfinderInstance:Stop()``: Stops a running Pathfinder instance.
+
 ``PathfinderInstance:Destroy()``: Destroys a Pathfinder instance.
+
+
+## Events
+``PathfinderInstance.OnPathCompleted`` : Fires when path is completed, either by reaching the last waypoint or one of the waypoints gets timed out.
+
+``PathfinderInstance.OnWaypointReached`` : Fires when the character reaches a waypoint.
+
+``PathfinderInstance.OnPathBlocked`` : Fires when the path gets blocked, just like the ``PathfindingService`` event.

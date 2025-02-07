@@ -54,6 +54,14 @@ function Pathfinder.new(char: Model, config: Types.PathfinderConfiguration): Pat
 	s._memory = {}
 	s._abilityCooldowns = {}
 
+	s._pathCompletedEvent = Instance.new("BindableEvent")
+	s._pathBlockedEvent = Instance.new("BindableEvent")
+	s._waypointReachedEvent = Instance.new("BindableEvent")
+
+	s.OnPathCompleted = s._pathCompletedEvent.Event
+	s.OnPathBlocked = s._pathBlockedEvent.Event
+	s.OnWaypointReached = s._waypointReachedEvent.Event
+
 	s._path = PathfindingService:CreatePath(config.AgentParameters or 	
 		{
 			AgentRadius = 2, 
@@ -207,6 +215,10 @@ function Pathfinder:Destroy()
 	for _, c: RBXScriptConnection in self._connections do
 		c:Disconnect()
 	end
+
+	self._waypointReachedEvent:Destroy()
+	self._pathCompletedEvent:Destroy()
+	self._pathBlockedEvent:Destroy()
 
 	setmetatable(self, nil)
 end

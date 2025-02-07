@@ -25,7 +25,13 @@ export type Pathfinder = {
 	["_noPathAction"]: ((t) -> ())?,
 	["_moveFunction"]: ((Vector3) -> ())?,
 	["_jumpFunction"]: ((Vector3) -> (boolean))?,
-	["_randomMoveFunction"]: (() -> (Vector3))?
+	["_randomMoveFunction"]: (() -> (Vector3))?,
+	["_pathCompletedEvent"]: BindableEvent,
+	["_waypointReachedEvent"]: BindableEvent,
+	["_pathBlockedEvent"]: BindableEvent,
+	["OnPathCompleted"]: RBXScriptSignal,
+	["OnPathBlocked"]: RBXScriptSignal,
+	["OnWaypointReached"]: RBXScriptSignal,
 }
 
 export type PathfinderAbilities = {
@@ -61,7 +67,8 @@ export type t = {
 	["Target"]: Model | Part | Vector3,
 	["Distance"]: number,
 	["Move"]: (Vector3) -> (),
-	["RandomMove"]: () -> ()
+	["RandomMove"]: () -> (),
+	["DebugPrint"]: (any) -> (),
 }
 
 return {}
