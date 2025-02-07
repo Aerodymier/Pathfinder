@@ -79,6 +79,8 @@ end
 	Handles basic waypoint actions and increments _currentWaypoint.
 ]]
 function PathfinderMethods:_OnWaypointReached()
+	self._waypointReachedEvent:Fire(self:_DefaultT())
+
 	if self._waypoints and self._currentWaypoint and self._currentWaypoint < #self._waypoints then
 		self._currentWaypoint += 1
 		local currentWaypointInfo = self._waypoints[self._currentWaypoint]
@@ -106,6 +108,7 @@ function PathfinderMethods:_OnWaypointReached()
 		self:_DebugPrint("Passed waypoint " .. self._currentWaypoint .. "/" .. #self._waypoints)
 	elseif self._currentWaypoint and self._waypoints and self._currentWaypoint == #self._waypoints then
 		self._pathDone = true
+		self._pathCompletedEvent:Fire(self:_DefaultT())
 		self:_DebugPrint("Path is done, completed.")
 	end
 end
@@ -259,6 +262,7 @@ function PathfinderMethods:_OnPathBlocked(blockedWaypointIndex: number)
 
 		if Humanoid then
 			self:_DebugPrint("Current waypoint is blocked.")
+			self._pathBlockedEvent:Fire(self:_DefaultT())
 			self._pathDone = true
 
 			self:_PathOperations(self:_GetTargetPosition())
@@ -307,6 +311,7 @@ function PathfinderMethods:_PathOperations()
 		if self._lastPathTick then
 			if os.clock() - self._lastPathTick  > 5 then
 				self._pathDone = true
+				self._pathCompletedEvent:Fire(self:_DefaultT())
 			end
 		end
 	end
