@@ -67,7 +67,7 @@ jobs:
           asset_content_type: application/octet-stream
 
       - name: Upload place to artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ExamplePlace.rbxl
           path: ExamplePlace.rbxl
