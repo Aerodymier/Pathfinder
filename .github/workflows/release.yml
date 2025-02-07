@@ -48,7 +48,7 @@ jobs:
           asset_content_type: application/octet-stream
 
       - name: Upload module to artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: module.rbxm
           path: module.rbxm
