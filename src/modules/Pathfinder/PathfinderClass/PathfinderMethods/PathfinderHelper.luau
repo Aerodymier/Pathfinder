@@ -101,14 +101,13 @@ function PathfinderHelper:_OnPositionChanged()
 	local direction = newPos - self._memory["PreviousPos"]
 
 	if self._memory["PreviousDirection"] and 
-		self._memory["PreviousDirection"]:FuzzyEq(direction, .75) then
+		math.abs(math.deg(self._memory["PreviousDirection"]:Angle(direction))) < 10 then
 		self:_DebugPrint("direction same " .. tostring(self._memory["PreviousDirection"]) .. " " .. tostring(direction))
 	else
 		self._pathDone = true
 		self:_DebugPrint("direction different " .. tostring(self._memory["PreviousDirection"]) .. " " .. tostring(direction))
+		self._memory["PreviousDirection"] = direction
 	end
-
-	self._memory["PreviousDirection"] = direction
 end
 
 function PathfinderHelper:_CheckIfAbilityCanBeActivated(dist: number, n: number): boolean
