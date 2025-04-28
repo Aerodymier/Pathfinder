@@ -97,6 +97,8 @@ Config has the following options as keys of a table:
 
 ``["DebugWaypoint"]: boolean?`` :  Optional, defaults to ``false``, enables or disables the debug waypoints. If you are having path issues, this will be helpful to point out the issue.
 
+``["DebugLevel"]: number?`` : Optional, defaults to ``1``, basically the verbosity level of debug prints. Possible values are ``1``, ``2`` and ``3``.
+
 ``["MovingTarget"]: boolean?`` : Optional, defaults to ``false``, enables or disables moving target support. Prefer disabling it if the target will not move.
 
 ``["RandomMove"]: boolean?`` : Optional, defaults to ``false``, enables or disables random moving when there is no path or moving target is outside of the tracking range.
