@@ -64,10 +64,12 @@ function Pathfinder.new(char: Model, config: Types.PathfinderConfiguration): Pat
 	s._pathCompletedEvent = Instance.new("BindableEvent")
 	s._pathBlockedEvent = Instance.new("BindableEvent")
 	s._waypointReachedEvent = Instance.new("BindableEvent")
+	s._idleEvent = Instance.new("BindableEvent")
 
 	s.OnPathCompleted = s._pathCompletedEvent.Event
 	s.OnPathBlocked = s._pathBlockedEvent.Event
 	s.OnWaypointReached = s._waypointReachedEvent.Event
+	s.OnIdle = s._idleEvent.Event
 
 	s._path = PathfindingService:CreatePath(config.AgentParameters or 	
 		{
@@ -181,7 +183,7 @@ function Pathfinder:Run()
 						if self._abilityLastActivated < os.clock() and self._randomMove then 
 							self:_RandomMove()
 						else
-							-- TODO: add an event here
+							self._idleEvent:Fire(self:_DefaultT())
 						end
 					end
 				elseif self._abilityLastActivated < os.clock() and self._randomMove then
@@ -238,6 +240,7 @@ function Pathfinder:Destroy()
 	self._waypointReachedEvent:Destroy()
 	self._pathCompletedEvent:Destroy()
 	self._pathBlockedEvent:Destroy()
+	self._idleEvent:Destroy()
 
 	setmetatable(self, nil)
 end

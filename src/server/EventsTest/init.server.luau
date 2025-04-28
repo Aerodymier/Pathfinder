@@ -20,6 +20,10 @@ local function onWaypointReachedEvent(t: Types.t)
     t.DebugPrint("OnWaypointReachedEvent event triggered.")
 end
 
+local function onIdle(t: Types.t)
+	t.DebugPrint("OnIdle event triggered.")
+end
+
 local function onCharacterAdded(char: Model)
 	if not char.Parent then return end
 	local target = char.Parent:FindFirstChild("End") :: BasePart
@@ -54,6 +58,7 @@ local function onCharacterAdded(char: Model)
     p.OnPathCompleted:Connect(onPathCompleted)
     p.OnWaypointReached:Connect(onWaypointReachedEvent)
     p.OnPathBlocked:Connect(onPathBlocked)
+	p.OnIdle:Connect(onIdle)
 	
 	p:Run()
 end
