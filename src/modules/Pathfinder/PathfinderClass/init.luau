@@ -29,6 +29,10 @@ function Pathfinder.new(char: Model, config: Types.PathfinderConfiguration): Pat
 		end
 	end
 
+	if config.DebugLevel then
+		assert(config.DebugLevel > 0 and config.DebugLevel <= 3, "DebugLevel must be in between 1 and 3.")
+	end
+
 	local _, charBoundingBox = char:GetBoundingBox()
 
 	local s = {} :: Types.Pathfinder
@@ -44,12 +48,15 @@ function Pathfinder.new(char: Model, config: Types.PathfinderConfiguration): Pat
 	s._debugMode = config.DebugMode or false
 	s._debugWaypoint = config.DebugWaypoint or false
 	s._randomMove = config.RandomMove or false
+	s._debugLevel = config.DebugLevel or 1
 	s._moveFunction = config.MoveFunction
 	s._jumpFunction = config.JumpFunction
 	s._randomMoveFunction = config.RandomMoveFunction
 	s._noPathAction = config.NoPathAction
 	s._abilityLastActivated = -1
 	s._currentAbilityIndex = 0
+	s._pathCount = 0
+	s._startTime = 0
 	s._connections = {}
 	s._memory = {}
 	s._abilityCooldowns = {}
@@ -101,8 +108,10 @@ end
 	Run Pathfinder. Will continue to run unless stopped if movingTarget is true.
 ]]
 function Pathfinder:Run()
-	self:_DebugPrint("Pathfinding started.")
+	self:_DebugPrint(1, "Pathfinding started.")
 	self._running = true
+	self._startTime = os.clock()
+	self._pathCount = 0
 	self:_InitPathfinding()
 	
 	local function checkAbilities(dist: number)
@@ -144,6 +153,14 @@ function Pathfinder:Run()
 	if self._movingTarget then
 		task.spawn(function()
 			while self._running do
+				if self._debugMode then
+					if os.clock() - self._startTime > 3 then
+						self._startTime = os.clock()
+						self:_DebugPrint(1, "Paths per second: " .. self._pathCount :: number/3)
+						self._pathCount = 0
+					end
+				end
+
 				if self._target.Parent then
 					local charPos = self:_GetCharacterPosition() :: Vector3
 					local targetPos = self:_GetTargetPosition() :: Vector3
@@ -156,13 +173,15 @@ function Pathfinder:Run()
 						and dist > self._movingTargetRetargetingRange then
 						self:_PathOperations(self._target)
 					else
-						self:_DebugPrint("Moving target not in range or distance is lower than "
+						self:_DebugPrint(1, "Moving target not in range or distance is lower than "
 							.. "retargeting range: " .. tostring(dist) ..
 							" - " .. tostring(self._movingTargetTrackingRange)
 						)
 
 						if self._abilityLastActivated < os.clock() and self._randomMove then 
-							self:_RandomMove() 
+							self:_RandomMove()
+						else
+							-- TODO: add an event here
 						end
 					end
 				elseif self._abilityLastActivated < os.clock() and self._randomMove then
@@ -175,7 +194,7 @@ function Pathfinder:Run()
 	else
 		local pos = self:_GetTargetPosition()
 
-		self:_DebugPrint("Moving to " .. tostring(pos))
+		self:_DebugPrint(1, "Moving to " .. tostring(pos))
 
 		self:_PathOperations(pos)
 		
