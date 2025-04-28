@@ -17,7 +17,7 @@ function PathfinderMethods:_MoveTo(p: Vector3)
 		if Humanoid then
 			Humanoid:MoveTo(p)
 		else
-			self:_DebugPrint("Humanoid does not exist, MoveTo did not run.")
+			self:_DebugPrint(1, "Humanoid does not exist, MoveTo did not run.")
 		end
 	end
 end
@@ -34,7 +34,7 @@ function PathfinderMethods:_Jump(p: Vector3): boolean
 		if Humanoid then
 			Humanoid.Jump = true
 		else
-			self:_DebugPrint("Humanoid does not exist, Jump did not run.")
+			self:_DebugPrint(1, "Humanoid does not exist, Jump did not run.")
 		end
 
 		return true
@@ -46,7 +46,7 @@ end
 ]]
 function PathfinderMethods:_RandomMove()
 	local pos: Vector3?
-	self:_DebugPrint("Random moving")
+	self:_DebugPrint(1, "Random moving")
 	self._abilityLastActivated = os.clock() + 5
 
 	if self._randomMoveFunction then
@@ -89,7 +89,7 @@ function PathfinderMethods:_OnWaypointReached()
 		if currentWaypointInfo.Action == Enum.PathWaypointAction.Walk then
 			self:_MoveTo(currentWaypointInfo.Position)
 		elseif currentWaypointInfo.Action == Enum.PathWaypointAction.Jump then
-			self:_DebugPrint("Waypoint " .. self._currentWaypoint .. " action is Jump.")
+			self:_DebugPrint(1, "Waypoint " .. self._currentWaypoint .. " action is Jump.")
 			local Humanoid = self._character:FindFirstChildOfClass("Humanoid")
 			if not Humanoid then return end
 
@@ -99,17 +99,17 @@ function PathfinderMethods:_OnWaypointReached()
 				self:_MoveTo(currentWaypointInfo.Position)
 			end
 		else
-			self:_DebugPrint("Waypoint action: " .. currentWaypointInfo.Action.Name)
+			self:_DebugPrint(1, "Waypoint action: " .. currentWaypointInfo.Action.Name)
 			self:_MoveTo(currentWaypointInfo.Position)
 		end
 
 		self:_InsertDebugWaypoint(currentWaypointInfo.Position, self._currentWaypoint-1, nil, currentWaypointInfo.Action)
 
-		self:_DebugPrint("Passed waypoint " .. self._currentWaypoint .. "/" .. #self._waypoints)
+		self:_DebugPrint(1, "Passed waypoint " .. self._currentWaypoint .. "/" .. #self._waypoints)
 	elseif self._currentWaypoint and self._waypoints and self._currentWaypoint == #self._waypoints then
 		self._pathDone = true
 		self._pathCompletedEvent:Fire(self:_DefaultT())
-		self:_DebugPrint("Path is done, completed.")
+		self:_DebugPrint(1, "Path is done, completed.")
 	end
 end
 
@@ -118,15 +118,16 @@ end
 ]]
 function PathfinderMethods:_MoveInPath(to: Vector3)
 	self._pathDone = false
-	self:_DebugPrint("Moving in path to " .. tostring(to))
+	self:_DebugPrint(1, "Moving in path to " .. tostring(to))
 	local Humanoid = self._character:FindFirstChildOfClass("Humanoid") :: Humanoid
 	local RootPart = Humanoid.RootPart or self._character:FindFirstChild("HumanoidRootPart") :: Part
 
 	self._path:ComputeAsync(RootPart.Position, to)
+	self._pathCount = self._pathCount :: number + 1
 	self._waypoints = {}
 
 	if self._path.Status == Enum.PathStatus.Success then
-		self:_DebugPrint("Path creation was successful.")
+		self:_DebugPrint(1, "Path creation was successful.")
 		self._waypoints = self._path:GetWaypoints()
 		self._currentWaypoint = 0
 
@@ -148,7 +149,7 @@ function PathfinderMethods:_MoveInPath(to: Vector3)
 						local direction1 = self:_GetXZDirection(charPos, previousPos)
 						local direction2 = self:_GetXZDirection(charPos, currentWaypointPos)
 						local directionNext
-						local angleNext
+						local angleNext: number
 						
 						if self._currentWaypoint < #self._waypoints then
 							directionNext = self:_GetXZDirection(charPos, self._waypoints[self._currentWaypoint+1].Position)
@@ -156,13 +157,11 @@ function PathfinderMethods:_MoveInPath(to: Vector3)
 						end
 						
 						local angle = direction1:Angle(direction2)
+						self:_DebugPrint(3, "Angle " .. " " .. tostring(self._currentWaypoint) .. " " .. tostring(angle) .. " " .. tostring(angleNext))
 						
-						if directionNext and angleNext and math.round(angle) == 3 and 
-							math.round(angleNext) == 3 then
-							self:_DebugPrint("Skipped the waypoint behind the character " .. tostring(angle) .. " " .. tostring(angleNext))
+						if directionNext and angleNext and angleNext*1.5 > angle then
+							self:_DebugPrint(2, "Skipped the waypoint behind the character " .. tostring(angle) .. " " .. tostring(angleNext))
 							continue
-						--else
-							--self:_DebugPrint("Angle " .. " " .. tostring(self._currentWaypoint) .. " " .. tostring(angle) .. " " .. tostring(angleNext))
 						end
 					end
 
@@ -189,7 +188,7 @@ function PathfinderMethods:_MoveInPath(to: Vector3)
 
 						local direction = self:_GetXZDirection(prePrevWaypointP, prevWaypointP)
 						
-						--self:_DebugPrint(tostring(self._currentWaypoint) .. " " .. tostring(direction) .. " " .. tostring(previousDirection))
+						--self:_DebugPrint(1, tostring(self._currentWaypoint) .. " " .. tostring(direction) .. " " .. tostring(previousDirection))
 
 						if previousDirection and not previousDirection:FuzzyEq(direction, 0.01) and
 							(prePrevWaypointP.Y == prevWaypointP.Y 
@@ -201,7 +200,7 @@ function PathfinderMethods:_MoveInPath(to: Vector3)
 							self:_InsertDebugWaypoint(prevWaypointP, self._currentWaypoint-2, Color3.fromRGB(255, 0, 0))
 
 							if not RootPart.AssemblyLinearVelocity:FuzzyEq(Vector3.new(0, 0, 0), 0.01) then
-								self:_DebugPrint("Waiting for MoveToFinished")
+								self:_DebugPrint(1, "Waiting for MoveToFinished")
 								--Humanoid.MoveToFinished:Wait()
 								--MoveToFinished doesn't do the job in most cases and is not the effect we want
 
@@ -218,12 +217,12 @@ function PathfinderMethods:_MoveInPath(to: Vector3)
 				end
 			end
 
-			self:_DebugPrint("Path took " .. os.clock() - start .. " seconds.")
+			self:_DebugPrint(2, "Path took " .. os.clock() - start .. " seconds.")
 		end)
 	elseif self._path.Status == Enum.PathStatus.NoPath or 
 		self._path.Status == Enum.PathStatus.ClosestNoPath  then
 		-- 04/12/2024, even if it is marked as deprecated, pathfinding service still returns ClosestNoPath
-		self:_DebugPrint("No path.")
+		self:_DebugPrint(1, "No path.")
 
 		local targetPos = self:_GetTargetPosition() :: Vector3
 		local charPos = self:_GetCharacterPosition() :: Vector3
@@ -233,10 +232,10 @@ function PathfinderMethods:_MoveInPath(to: Vector3)
 			self._noPathAction(self:_DefaultT())
 		else
 			if dist < (self._movingTargetTrackingRange or math.huge) then
-				self:_DebugPrint("Moving target is in range, moving to moving target.")
+				self:_DebugPrint(1, "Moving target is in range, moving to moving target.")
 				self:_MoveTo(targetPos)
 			else
-				self:_DebugPrint("Random moving.")
+				self:_DebugPrint(1, "Random moving.")
 				self:_RandomMove()
 			end
 
@@ -246,7 +245,7 @@ function PathfinderMethods:_MoveInPath(to: Vector3)
 		end
 	else
 		self:_MoveTo(RootPart.Position)
-		self:_DebugPrint("Unknown path status: " .. self._path.Status.Name)
+		self:_DebugPrint(1, "Unknown path status: " .. self._path.Status.Name)
 		self:_RandomMove()
 
 		self._pathDone = true
@@ -261,7 +260,7 @@ function PathfinderMethods:_OnPathBlocked(blockedWaypointIndex: number)
 		local Humanoid = self._character:FindFirstChildOfClass("Humanoid")
 
 		if Humanoid then
-			self:_DebugPrint("Current waypoint is blocked.")
+			self:_DebugPrint(1, "Current waypoint is blocked.")
 			self._pathBlockedEvent:Fire(self:_DefaultT())
 			self._pathDone = true
 
@@ -274,7 +273,7 @@ end
 	Cleanup past waypoints and reset some variables
 ]]
 function PathfinderMethods:_InitPathfinding()
-	self:_DebugPrint("Pathfinding init")
+	self:_DebugPrint(1, "Pathfinding init")
 	self._waypoints = {}
 	self._currentWaypoint = 1
 	self._lastPathTick = nil
@@ -301,9 +300,9 @@ function PathfinderMethods:_PathOperations()
 		self._memory["PreviousPos"] = self._memory["CurrentPos"]
 	end
 
-	self:_DebugPrint("Path done status: " .. tostring(self._pathDone) or "nil")
+	self:_DebugPrint(2, "Path done status: " .. tostring(self._pathDone) or "nil")
 	if self._pathDone then
-		self:_DebugPrint("Path was done, initializing")
+		self:_DebugPrint(1, "Path was done, initializing")
 		self:_InitPathfinding()
 
 		self:_MoveInPath(self:_GetTargetPosition())
