@@ -19,7 +19,7 @@ Pathfinder is a pathfinding NPC character control module, aimed to be easy to us
 You can install this module using wally by adding this to your [dependencies],
 
 ```
-Pathfinder = "aerodymier/pathfinder@^0.2.1"
+Pathfinder = "aerodymier/pathfinder@^0.2.2"
 ```
 
 and then run ``wally install`` in your current directory.
@@ -170,8 +170,30 @@ and expects a Vector3 return which the character will move to.
 
 
 ## Events
+All events get passed the following ``t`` table:
+
+```luau
+local t: Types.t = {
+    Character = self._character,
+    Target = self._target,
+    Distance = dist,
+    Move = function(p: Vector3)
+        self:_InitPathfinding()
+        self:_MoveInPath(p)
+    end,
+    RandomMove = function()	
+        self:_RandomMove()
+    end,
+    DebugPrint = function(...: any)
+        self:_DebugPrint(nil, ...)
+    end
+}
+```
+
 ``PathfinderInstance.OnPathCompleted`` : Fires when path is completed, either by reaching the last waypoint or one of the waypoints gets timed out.
 
 ``PathfinderInstance.OnWaypointReached`` : Fires when the character reaches a waypoint.
 
 ``PathfinderInstance.OnPathBlocked`` : Fires when the path gets blocked, just like the ``PathfindingService`` event.
+
+``PathfinderInstance.OnIdle`` : Fires when ``MovingTarget`` is ``true`` and ``RandomMove`` is false, when the ``MovingTarget`` is out of range or the distance is less than retargeting range.
