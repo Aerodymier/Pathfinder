@@ -29,9 +29,14 @@ export type Pathfinder = {
 	["_pathCompletedEvent"]: BindableEvent,
 	["_waypointReachedEvent"]: BindableEvent,
 	["_pathBlockedEvent"]: BindableEvent,
+	["_idleEvent"]: BindableEvent,
+	["_pathCount"]: number,
+	["_startTime"]: number,
+	["_debugLevel"]: number,
 	["OnPathCompleted"]: RBXScriptSignal,
 	["OnPathBlocked"]: RBXScriptSignal,
 	["OnWaypointReached"]: RBXScriptSignal,
+	["OnIdle"]: RBXScriptSignal,
 }
 
 export type PathfinderAbilities = {
@@ -50,6 +55,7 @@ export type PathfinderConfiguration = {
 	["MovingTargetTrackingRange"]: number?,
 	["MovingTargetRetargetingRange"]: number?,
 	["DebugMode"]: boolean?,
+	["DebugLevel"]: number?,
 	["DebugWaypoint"]: boolean?,
 	["MovingTarget"]: boolean?,
 	["RandomMove"]: boolean?,

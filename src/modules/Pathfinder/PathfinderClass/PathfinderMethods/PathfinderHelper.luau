@@ -101,14 +101,13 @@ function PathfinderHelper:_OnPositionChanged()
 	local direction = newPos - self._memory["PreviousPos"]
 
 	if self._memory["PreviousDirection"] and 
-		self._memory["PreviousDirection"]:FuzzyEq(direction, .75) then
-		self:_DebugPrint("direction same " .. tostring(self._memory["PreviousDirection"]) .. " " .. tostring(direction))
+		math.abs(math.deg(self._memory["PreviousDirection"]:Angle(direction))) < 10 then
+		self:_DebugPrint(3, "direction same " .. tostring(self._memory["PreviousDirection"]) .. " " .. tostring(direction))
 	else
 		self._pathDone = true
-		self:_DebugPrint("direction different " .. tostring(self._memory["PreviousDirection"]) .. " " .. tostring(direction))
+		self:_DebugPrint(3, "direction different " .. tostring(self._memory["PreviousDirection"]) .. " " .. tostring(direction))
+		self._memory["PreviousDirection"] = direction
 	end
-
-	self._memory["PreviousDirection"] = direction
 end
 
 function PathfinderHelper:_CheckIfAbilityCanBeActivated(dist: number, n: number): boolean
@@ -136,7 +135,7 @@ function PathfinderHelper:_CheckAndRunAbility(dist: number, n: number): boolean
 	local canBeActivated = self:_CheckIfAbilityCanBeActivated(dist, n)
 
 	if canBeActivated then
-		self:_DebugPrint("Activating ability " .. tostring(n))
+		self:_DebugPrint(1, "Activating ability " .. tostring(n))
 
 		self._abilityCooldowns[n] = os.clock()
 		self._abilityLastActivated = os.clock() + (ability.ActiveTime or 0)
@@ -149,10 +148,9 @@ function PathfinderHelper:_CheckAndRunAbility(dist: number, n: number): boolean
 	return false
 end
 
-function PathfinderHelper:_DebugPrint(...: any)
-	if self._debugMode then
+function PathfinderHelper:_DebugPrint(debugLevel: number, ...: any)
+	if self._debugMode and not (debugLevel and self._debugLevel < debugLevel) then
 		local charName: string = self._character.Name
-		
 		print("[" .. charName .. "]", ...)
 	end
 end
@@ -186,7 +184,7 @@ function PathfinderHelper:_DefaultT(): Types.t
 			self:_RandomMove()
 		end,
 		DebugPrint = function(...: any)
-			self:_DebugPrint(...)
+			self:_DebugPrint(nil, ...)
 		end
 	}
 end
