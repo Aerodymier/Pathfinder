@@ -41,7 +41,7 @@ export type Pathfinder = {
 	["OnIdle"]: RBXScriptSignal,
 	["OnMove"]: RBXScriptSignal,
 
-	["ChangeTarget"]: (self: any, newTarget: Vector3 | BasePart | Model) -> (),
+	["ChangeTarget"]: (self: any, newTarget: Vector3 | BasePart | Model | Attachment) -> (),
 	["Run"]: (self: any) -> (),
 	["Stop"]: (self: any) -> (),
 	["Destroy"]: (self: any) -> (),

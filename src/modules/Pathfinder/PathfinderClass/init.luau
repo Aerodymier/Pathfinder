@@ -101,7 +101,7 @@ end
 --[[
 	Change the target. Use this when you want to change the active target.
 ]]
-function Pathfinder:ChangeTarget(newTarget: Vector3 | BasePart | Model)
+function Pathfinder:ChangeTarget(newTarget: Vector3 | BasePart | Model | Attachment)
 	self._target = newTarget
 
 	if self._movingTarget then

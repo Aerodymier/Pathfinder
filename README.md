@@ -164,7 +164,7 @@ and expects a Vector3 return which the character will move to.
 
 ``PathfinderInstance:Run()``: Runs Pathfinder.
 
-``PathfinderInstance:ChangeTarget(Vector3 | BasePart | Model))``: Used to change the target and also retarget to the new target. Still targets will not retarget unless ``:Run()`` is called manually.
+``PathfinderInstance:ChangeTarget(Vector3 | BasePart | Model | Attachment))``: Used to change the target and also retarget to the new target. Still targets will not retarget unless ``:Run()`` is called manually.
 
 ``PathfinderInstance:Stop()``: Stops a running Pathfinder instance.
 
