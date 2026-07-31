@@ -198,4 +198,4 @@ local t: Types.t = {
 
 ``PathfinderInstance.OnPathBlocked`` : Fires when the path gets blocked, just like the ``PathfindingService`` event.
 
-``PathfinderInstance.OnIdle`` : Fires when ``MovingTarget`` is ``true`` and ``RandomMove`` is false, when the ``MovingTarget`` is out of range or the distance is less than retargeting range.
+``PathfinderInstance.OnIdle`` : Fires when ``MovingTarget`` is ``true`` and ``RandomMove`` is false, when the ``MovingTarget`` is out of range or the distance is less than retargeting range. Only fires when the character state changes to ``Idle``.
