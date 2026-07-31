@@ -45,6 +45,7 @@ end
 	RandomMove which is structurally like an ability. Basically randomly moves to a close position.
 ]]
 function PathfinderMethods:_RandomMove()
+	self._characterState = "Move"
 	local pos: Vector3?
 	self:_DebugPrint(1, "Random moving")
 	self._abilityLastActivated = os.clock() + 5
@@ -109,6 +110,10 @@ function PathfinderMethods:_OnWaypointReached()
 	elseif self._currentWaypoint and self._waypoints and self._currentWaypoint == #self._waypoints then
 		self._pathDone = true
 		self._pathCompletedEvent:Fire(self:_DefaultT())
+		if self._characterState ~= "Idle" then
+			self._characterState = "Idle"
+			self._idleEvent:Fire(self:_DefaultT())
+		end
 		self:_DebugPrint(1, "Path is done, completed.")
 	end
 end
@@ -117,6 +122,7 @@ end
 	The main function for pathfinding to a position.
 ]]
 function PathfinderMethods:_MoveInPath(to: Vector3)
+	self._characterState = "Move"
 	self._pathDone = false
 	self:_DebugPrint(1, "Moving in path to " .. tostring(to))
 	local Humanoid = self._character:FindFirstChildOfClass("Humanoid") :: Humanoid
