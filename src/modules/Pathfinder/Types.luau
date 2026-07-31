@@ -81,6 +81,16 @@ export type PathfinderAbilities = {
 	},
 }
 
+export type AgentParameters = {
+	["AgentRadius"]: number?,
+	["AgentHeight"]: number?,
+	["AgentCanJump"]: boolean?,
+	["AgentCanClimb"]: boolean?,
+	["WaypointSpacing"]: number?,
+	["Costs"]: { [string]: number }?,
+	["PathSettings"]: { [string]: any }?,
+}
+
 export type PathfinderConfiguration = {
 	["Target"]: Vector3 | BasePart | Model,
 	["MovingTargetTrackingRange"]: number?,
@@ -95,7 +105,7 @@ export type PathfinderConfiguration = {
 	["JumpFunction"]: ((Vector3) -> boolean)?,
 	["RandomMoveFunction"]: (() -> Vector3)?,
 	["NoPathAction"]: ((t) -> ())?,
-	["AgentParameters"]: { [string]: any }?,
+	["AgentParameters"]: AgentParameters?,
 	["AbilitiesTable"]: PathfinderAbilities?,
 }
 
