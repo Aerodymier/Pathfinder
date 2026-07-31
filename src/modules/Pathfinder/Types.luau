@@ -33,6 +33,7 @@ export type Pathfinder = {
 	["_pathCount"]: number,
 	["_startTime"]: number,
 	["_debugLevel"]: number,
+	["_characterState"]: CharacterState,
 	["OnPathCompleted"]: RBXScriptSignal,
 	["OnPathBlocked"]: RBXScriptSignal,
 	["OnWaypointReached"]: RBXScriptSignal,
@@ -69,6 +70,8 @@ export type Pathfinder = {
 	["Roll"]: (self: any, n: number, randomTable: { [number]: { [string]: number } }) -> number,
 	["_DefaultT"]: (self: any) -> t,
 }
+
+export type CharacterState = "Move" | "Idle"
 
 export type PathfinderAbilities = {
 	[number]: {
