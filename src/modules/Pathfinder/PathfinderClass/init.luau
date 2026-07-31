@@ -53,6 +53,7 @@ function Pathfinder.new(char: Model, config: Types.PathfinderConfiguration): Pat
 	s._jumpFunction = config.JumpFunction
 	s._randomMoveFunction = config.RandomMoveFunction
 	s._noPathAction = config.NoPathAction
+	s._characterState = "Idle"
 	s._abilityLastActivated = -1
 	s._currentAbilityIndex = 0
 	s._pathCount = 0
@@ -183,11 +184,19 @@ function Pathfinder:Run()
 						if self._abilityLastActivated < os.clock() and self._randomMove then 
 							self:_RandomMove()
 						else
-							self._idleEvent:Fire(self:_DefaultT())
+							if self._characterState ~= "Idle" then
+								self._characterState = "Idle"
+								self._idleEvent:Fire(self:_DefaultT())
+							end
 						end
 					end
 				elseif self._abilityLastActivated < os.clock() and self._randomMove then
 					self:_RandomMove()
+				else
+					if self._characterState ~= "Idle" then
+						self._characterState = "Idle"
+						self._idleEvent:Fire(self:_DefaultT())
+					end
 				end
 
 				task.wait()
@@ -223,6 +232,10 @@ end
 function Pathfinder:Stop()
 	self._running = false
 	self._pathDone = true
+	if self._characterState ~= "Idle" then
+		self._characterState = "Idle"
+		self._idleEvent:Fire(self:_DefaultT())
+	end
 end
 
 --[[
