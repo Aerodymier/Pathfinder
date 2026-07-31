@@ -53,6 +53,7 @@ function Pathfinder.new(char: Model, config: Types.PathfinderConfiguration): Pat
 	s._jumpFunction = config.JumpFunction
 	s._randomMoveFunction = config.RandomMoveFunction
 	s._noPathAction = config.NoPathAction
+	s._characterState = "Idle"
 	s._abilityLastActivated = -1
 	s._currentAbilityIndex = 0
 	s._pathCount = 0
@@ -65,11 +66,13 @@ function Pathfinder.new(char: Model, config: Types.PathfinderConfiguration): Pat
 	s._pathBlockedEvent = Instance.new("BindableEvent")
 	s._waypointReachedEvent = Instance.new("BindableEvent")
 	s._idleEvent = Instance.new("BindableEvent")
+	s._moveEvent = Instance.new("BindableEvent")
 
 	s.OnPathCompleted = s._pathCompletedEvent.Event
 	s.OnPathBlocked = s._pathBlockedEvent.Event
 	s.OnWaypointReached = s._waypointReachedEvent.Event
 	s.OnIdle = s._idleEvent.Event
+	s.OnMove = s._moveEvent.Event
 
 	s._path = PathfindingService:CreatePath(config.AgentParameters or 	
 		{
@@ -98,7 +101,7 @@ end
 --[[
 	Change the target. Use this when you want to change the active target.
 ]]
-function Pathfinder:ChangeTarget(newTarget: Vector3 | BasePart | Model)
+function Pathfinder:ChangeTarget(newTarget: Vector3 | BasePart | Model | Attachment)
 	self._target = newTarget
 
 	if self._movingTarget then
@@ -183,11 +186,13 @@ function Pathfinder:Run()
 						if self._abilityLastActivated < os.clock() and self._randomMove then 
 							self:_RandomMove()
 						else
-							self._idleEvent:Fire(self:_DefaultT())
+							self:_SetCharacterState("Idle")
 						end
 					end
 				elseif self._abilityLastActivated < os.clock() and self._randomMove then
 					self:_RandomMove()
+				else
+					self:_SetCharacterState("Idle")
 				end
 
 				task.wait()
@@ -223,6 +228,14 @@ end
 function Pathfinder:Stop()
 	self._running = false
 	self._pathDone = true
+	self:_SetCharacterState("Idle")
+end
+
+--[[
+	Get the current character state ("Move" or "Idle").
+]]
+function Pathfinder:GetState(): Types.CharacterState
+	return self._characterState
 end
 
 --[[
@@ -241,6 +254,7 @@ function Pathfinder:Destroy()
 	self._pathCompletedEvent:Destroy()
 	self._pathBlockedEvent:Destroy()
 	self._idleEvent:Destroy()
+	self._moveEvent:Destroy()
 
 	setmetatable(self, nil)
 end

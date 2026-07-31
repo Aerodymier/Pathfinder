@@ -32,7 +32,7 @@ local function onPlrAdded(plr: Player, char: Model)
 					Truss = 1
 				}
 			}
-		}) :: any
+		})
 
 		p:Run()
 	end

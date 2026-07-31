@@ -4,6 +4,6 @@
 # New tools can be added by running `rokit add <tool>` in a terminal.
 
 [tools]
-selene = "Kampfkarren/selene@0.28.0"
-luau-lsp = "JohnnyMorganz/luau-lsp@1.38.1"
-rojo = "rojo-rbx/rojo@7.4.4"
+selene = "Kampfkarren/selene@0.31.0"
+luau-lsp = "JohnnyMorganz/luau-lsp@1.69.0"
+rojo = "rojo-rbx/rojo@7.7.0"

@@ -19,7 +19,7 @@ Pathfinder is a pathfinding NPC character control module, aimed to be easy to us
 You can install this module using wally by adding this to your [dependencies],
 
 ```
-Pathfinder = "aerodymier/pathfinder@^0.2.2"
+Pathfinder = "aerodymier/pathfinder@^0.2.3"
 ```
 
 and then run ``wally install`` in your current directory.
@@ -164,11 +164,13 @@ and expects a Vector3 return which the character will move to.
 
 ``PathfinderInstance:Run()``: Runs Pathfinder.
 
-``PathfinderInstance:ChangeTarget(Vector3 | BasePart | Model))``: Used to change the target and also retarget to the new target. Still targets will not retarget unless ``:Run()`` is called manually.
+``PathfinderInstance:ChangeTarget(Vector3 | BasePart | Model | Attachment))``: Used to change the target and also retarget to the new target. Still targets will not retarget unless ``:Run()`` is called manually.
 
 ``PathfinderInstance:Stop()``: Stops a running Pathfinder instance.
 
 ``PathfinderInstance:Destroy()``: Destroys a Pathfinder instance.
+
+``PathfinderInstance:GetState()``: Returns the current character state as a string, namely ``"Move"`` or ``"Idle"``.
 
 
 ## Events
@@ -198,4 +200,6 @@ local t: Types.t = {
 
 ``PathfinderInstance.OnPathBlocked`` : Fires when the path gets blocked, just like the ``PathfindingService`` event.
 
-``PathfinderInstance.OnIdle`` : Fires when ``MovingTarget`` is ``true`` and ``RandomMove`` is false, when the ``MovingTarget`` is out of range or the distance is less than retargeting range.
+``PathfinderInstance.OnIdle`` : Fires when ``MovingTarget`` is ``true`` and ``RandomMove`` is false, when the ``MovingTarget`` is out of range or the distance is less than retargeting range. Only fires when the character state changes to ``Idle``.
+
+``PathfinderInstance.OnMove`` : Fires when the character state changes from ``Idle`` to ``Move``, so that is when the character starts moving after being idle.
