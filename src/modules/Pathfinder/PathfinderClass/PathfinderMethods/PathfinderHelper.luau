@@ -73,7 +73,7 @@ function PathfinderHelper:_GetTargetPosition(): Vector3
 
 	if typeof(self._target) == "Vector3" then
 		pos = self._target
-	elseif self._target:IsA("Part") then
+	elseif self._target:IsA("BasePart") then
 		pos = self._target.Position
 	else
 		pos = self._target:GetPivot().Position
