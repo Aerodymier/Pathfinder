@@ -29,6 +29,7 @@ export type Pathfinder = {
 	["_pathCompletedEvent"]: BindableEvent,
 	["_waypointReachedEvent"]: BindableEvent,
 	["_pathBlockedEvent"]: BindableEvent,
+	["_moveEvent"]: BindableEvent,
 	["_idleEvent"]: BindableEvent,
 	["_pathCount"]: number,
 	["_startTime"]: number,
@@ -38,11 +39,13 @@ export type Pathfinder = {
 	["OnPathBlocked"]: RBXScriptSignal,
 	["OnWaypointReached"]: RBXScriptSignal,
 	["OnIdle"]: RBXScriptSignal,
+	["OnMove"]: RBXScriptSignal,
 
 	["ChangeTarget"]: (self: any, newTarget: Vector3 | BasePart | Model) -> (),
 	["Run"]: (self: any) -> (),
 	["Stop"]: (self: any) -> (),
 	["Destroy"]: (self: any) -> (),
+	["GetState"]: (self: any) -> CharacterState,
 
 	["_MoveTo"]: (self: any, p: Vector3) -> (),
 	["_Jump"]: (self: any, p: Vector3) -> boolean,

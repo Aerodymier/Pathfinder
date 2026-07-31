@@ -170,6 +170,8 @@ and expects a Vector3 return which the character will move to.
 
 ``PathfinderInstance:Destroy()``: Destroys a Pathfinder instance.
 
+``PathfinderInstance:GetState()``: Returns the current character state as a string, namely ``"Move"`` or ``"Idle"``.
+
 
 ## Events
 All events get passed the following ``t`` table:
@@ -199,3 +201,5 @@ local t: Types.t = {
 ``PathfinderInstance.OnPathBlocked`` : Fires when the path gets blocked, just like the ``PathfindingService`` event.
 
 ``PathfinderInstance.OnIdle`` : Fires when ``MovingTarget`` is ``true`` and ``RandomMove`` is false, when the ``MovingTarget`` is out of range or the distance is less than retargeting range. Only fires when the character state changes to ``Idle``.
+
+``PathfinderInstance.OnMove`` : Fires when the character state changes from ``Idle`` to ``Move``, so that is when the character starts moving after being idle.
