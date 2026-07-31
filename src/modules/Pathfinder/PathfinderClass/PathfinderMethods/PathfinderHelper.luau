@@ -20,7 +20,7 @@ function PathfinderHelper:_InsertDebugWaypoint(pos: Vector3, num: number, color:
 	b.Parent = workspace
 
 	local bg = Instance.new("BillboardGui")
-	bg.Size = UDim2.new(1, 0, 1, 0)
+	bg.Size = UDim2.fromScale(1, 1)
 	bg.StudsOffset = Vector3.new(0, 1, 0)
 	bg.LightInfluence = 0
 
@@ -29,7 +29,7 @@ function PathfinderHelper:_InsertDebugWaypoint(pos: Vector3, num: number, color:
 	tl.TextWrapped = true
 	tl.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 	tl.TextColor3 = Color3.fromRGB(255, 255, 255)
-	tl.Size = UDim2.new(.9, 0, .9, 0)
+	tl.Size = UDim2.fromScale(.9, .9)
 	tl.Text = tostring(num)
 	tl.Parent = bg
 
